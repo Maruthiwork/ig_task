@@ -35,4 +35,6 @@ jobs:
             echo "Timestamp: $TIMESTAMP"
             cd /var/www/cmsapi
             docker system prune -af
-            docker compose up -d    
+            docker compose up -d
+            echo "Creating GCP compute image with unique identifier..."
+            gcloud compute images create ig_task_${TIMESTAMP} --source-disk=ig-task --source-disk-zone=asia-south1-c --force
