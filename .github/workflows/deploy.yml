@@ -1,0 +1,26 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches:
+      - maruthi-prelive
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.MARUTHI_SSH_PRIVATE_KEY_MAIN }}
+
+      - name: Sync files to remote server using rsync
+        env:
+          GCP_VM_USERNAME: ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}
+          GCP_VM_IP: ${{ secrets.MARUTHI_GCP_VM_IP_MAIN }}
+        run: |
+          rsync -avz --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}@${{ secrets.MARUTHI_GCP_VM_IP_MAIN }}:/var/www/cmsapi/
