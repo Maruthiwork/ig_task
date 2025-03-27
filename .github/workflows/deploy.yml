@@ -37,4 +37,4 @@ jobs:
             docker system prune -af
             docker compose up -d
             echo "Creating GCP compute image with unique identifier..."
-            
+            gcloud compute images create prod-cmsapi-${TIMESTAMP} --source-disk=ig-task --source-disk-zone=us-central1-c --force
