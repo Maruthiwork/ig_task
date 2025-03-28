@@ -40,11 +40,7 @@ jobs:
             echo "Creating GCP compute image with unique identifier..."
             gcloud compute images create ig-task1-${TIMESTAMP} --source-disk=ig-task --source-disk-zone=us-central1-c --force
             echo "Creating GCP instance template with unique identifier..."
-            gcloud compute instance-templates create ig-task-template-${TIMESTAMP} \
-              --machine-type=e2-micro \
-              --image=ig-task1-${TIMESTAMP} \
-              --image-project=maruthi-project \
-              --boot-disk-size=10GB \
-              --zone=us-central1-c
+            gcloud compute instance-templates create ig-task-template-${TIMESTAMP} --machine-type=e2-micro --image=ig-task1-${TIMESTAMP} --boot-disk-size=10GB --region=asia-south1
+
             echo "Instance template ig-task-template-${TIMESTAMP} created successfully!"
           EOF
