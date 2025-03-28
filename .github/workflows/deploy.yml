@@ -33,7 +33,7 @@ jobs:
             set -e
             TIMESTAMP=$(date +%Y%m%d%H%M%S)
             echo "Timestamp: $TIMESTAMP"
-            cd /var/www/cmsapi
+            cd /nginx-docker/
             docker system prune -af
             docker compose up -d
             echo "Creating GCP compute image with unique identifier..."
