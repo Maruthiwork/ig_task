@@ -39,6 +39,6 @@ jobs:
             echo "Creating GCP compute image with unique identifier..."
             gcloud compute images create ig-task1-${TIMESTAMP} --source-disk=ig-task --source-disk-zone=us-central1-c --force
             echo "Creating GCP instance template with unique identifier..."
-            #gcloud compute instance-templates create ig-task-${TIMESTAMP} --machine-type=e2-micro --image=ig-task-${TIMESTAMP} --boot-disk-type=pd-balanced --boot-disk-size=10GB --region=asia-south1 --labels=ig-task=ig-task
-
+            gcloud compute instance-templates create ig-task-${TIMESTAMP} --machine-type=e2-micro --image=ig-task-${TIMESTAMP} --boot-disk-type=pd-balanced --boot-disk-size=10GB --region=asia-south1 --labels=ig-task=ig-task
+            gcloud compute instance-groups managed rolling-action start-update instance-group-1 --version template=ig-task-${TIMESTAMP} --max-surge=1 --max-unavailable=0 --zone=asia-south2-a
             
