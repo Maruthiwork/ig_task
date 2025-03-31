@@ -3,7 +3,7 @@ name: Deploy to GCP VM
 on:
   push:
     branches:
-      - maruthi-preliv
+      - maruthi-prelive
 
 jobs:
   deploy:
@@ -34,14 +34,34 @@ jobs:
             set -e
             TIMESTAMP=$(date +%Y%m%d%H%M%S)
             echo "Timestamp: $TIMESTAMP"
-            cd /var/www/cmsapi
+            
+            # Change directory to where the Docker setup exists
+            cd /nginx-docker/
+
+            # Clean up old Docker containers and images
             docker system prune -af
             docker compose up -d
-            echo "Creating GCP compute image with unique identifier..."
-            gcloud compute images create ig-task1-${TIMESTAMP} --source-disk=ig-task --source-disk-zone=us-central1-c --force
-            echo "Creating GCP instance template with unique identifier..."
-            gcloud compute instance-templates create ig-task-template-${TIMESTAMP} --machine-type=e2-small --image=ig-task1-${TIMESTAMP} --boot-disk-size=10GB --region=asia-south1
 
-            echo "Instance template ig-task-template-${TIMESTAMP} created successfully!"
-            #gcloud compute instance-groups managed rolling-action start-update igtask --version template=ig-task1-${TIMESTAMP} --max-surge=1 --max-unavailable=0 --zone=asia-south2-c
+            echo "Stopping the VM before creating an image..."
+            gcloud compute instances stop ig-task --zone=us-central1-c
+            
+            echo "Creating GCP compute image with unique identifier..."
+            gcloud compute images create ig-task1-${TIMESTAMP} \
+              --source-disk=ig-task \
+              --source-disk-zone=us-central1-c \
+              --family=ig-task-family
+
+            echo "Creating GCP instance template with unique identifier..."
+            gcloud compute instance-templates create ig-task-${TIMESTAMP} \
+              --machine-type=e2-micro \
+              --image=ig-task1-${TIMESTAMP} \
+              --boot-disk-type=pd-balanced \
+              --boot-disk-size=10GB \
+              --tags=ig-task  # Retain original firewall tag
+            
+            echo "Updating the instance group with the new instance template..."
+            gcloud compute instance-groups managed rolling-action start-update instance-group-2 \
+              --version template=ig-task-${TIMESTAMP} \
+              --max-surge=1 --max-unavailable=0 \
+              --zone=asia-south1-c
           EOF
