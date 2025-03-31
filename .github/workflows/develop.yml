@@ -43,23 +43,20 @@ jobs:
             docker compose up -d
 
             echo "Creating GCP compute image with unique identifier..."
-            gcloud compute images create ig-task1-${TIMESTAMP} \
-              --source-disk=ig-task \
-              --source-disk-zone=us-central1-c \
-              --family=ig-task-family \
-              --force  # Create the image without stopping the VM
-
-            echo "Creating GCP instance template with unique identifier..."
-            gcloud compute instance-templates create ig-task-${TIMESTAMP} \
-              --machine-type=e2-micro \
-              --image=ig-task1-${TIMESTAMP} \
-              --boot-disk-type=pd-balanced \
-              --boot-disk-size=10GB \
-              --tags=ig-task  # Retain original firewall tag
-            
-            echo "Updating the instance group with the new instance template..."
+            gcloud compute images create ig-task-image \
+            --source-disk=ig-task \
+            --source-disk-zone=us-central1-c \
+            --family=ig-task-family \
+            --force
+            gcloud compute instance-templates create ig-task-template \
+            --machine-type=e2-micro \
+            --image-family=ig-task-family \
+            --image-project=${{ secrets.GCP_PROJECT_ID }} \
+            --tags=http-server,https-server,ig-task \
+            --boot-disk-size=10GB \
+            --boot-disk-type=pd-balanced
             gcloud compute instance-groups managed rolling-action start-update instance-group-2 \
-              --version template=ig-task-${TIMESTAMP} \
-              --max-surge=1 --max-unavailable=0 \
-              --zone=asia-south1-c
+            --version=template=ig-task-template \
+            --zone=us-central1-c \
+            --type=proactive
           EOF
