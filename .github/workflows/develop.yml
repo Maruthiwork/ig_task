@@ -42,14 +42,12 @@ jobs:
             docker system prune -af
             docker compose up -d
 
-            echo "Stopping the VM before creating an image..."
-            gcloud compute instances stop ig-task --zone=us-central1-c
-            
             echo "Creating GCP compute image with unique identifier..."
             gcloud compute images create ig-task1-${TIMESTAMP} \
               --source-disk=ig-task \
               --source-disk-zone=us-central1-c \
-              --family=ig-task-family
+              --family=ig-task-family \
+              --force  # Create the image without stopping the VM
 
             echo "Creating GCP instance template with unique identifier..."
             gcloud compute instance-templates create ig-task-${TIMESTAMP} \
