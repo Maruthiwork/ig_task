@@ -50,7 +50,7 @@ jobs:
             --boot-disk-size=10GB \
             --boot-disk-type=pd-balanced
             gcloud compute instance-groups managed rolling-action start-update instance-group-2 \
-            --version=template=ig-task-template1 \
+            --version=template=ig-task-template \
             --zone=us-central1-c \
             --type=proactive
           EOF
