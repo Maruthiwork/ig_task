@@ -1,11 +1,23 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: .
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    restart: always
+
+root@ig-task:~/nginx-docker# cat index.html 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Demo Page</title>
 </head>
 <body>
-    <h1>Welcome to My Nginx Page!</h1>
+    <h1>This is a maruthi demo page!</h1>
+    <p>Trying to test instance group deployment.</p>
 </body>
 </html>
