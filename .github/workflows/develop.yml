@@ -23,7 +23,7 @@ jobs:
           GCP_VM_USERNAME: ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}
           GCP_VM_IP: ${{ secrets.MARUTHI_GCP_VM_IP_MAIN }}
         run: |
-          rsync -avz --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}@${{ secrets.MARUTHI_GCP_VM_IP_MAIN }}:/nginx-docker/
+          rsync -avz --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}@${{ secrets.MARUTHI_GCP_VM_IP_MAIN }}:/root/nginx-docker/
       - name: SSH into the server and deploy with Docker Compose
         env:
           GCP_VM_USERNAME: ${{ secrets.MARUTHI_GCP_VM_USERNAME_MAIN }}
@@ -33,7 +33,7 @@ jobs:
             set -e
             TIMESTAMP=$(date +%Y%m%d%H%M%S)
             echo "Timestamp: $TIMESTAMP"
-            cd /nginx-docker/
+            cd /root/nginx-docker/
             docker system prune -af
             docker compose up -d
             echo "Creating GCP compute image with unique identifier..."
