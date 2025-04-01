@@ -40,11 +40,10 @@ jobs:
             gcloud compute images create ig-task-image-${TIMESTAMP} \
             --source-disk=ig-task \
             --source-disk-zone=asia-south1-c \
-            --family=ig-task-family \
             --force
             gcloud compute instance-templates create ig-task-template-${TIMESTAMP} \
             --machine-type=e2-small \
-            --image-family=ig-task-family \
+            --image=ig-task-image-${TIMESTAMP} \
             --image-project=${{ secrets.GCP_PROJECT_ID }} \
             --tags=http-server,https-server,ig-task \
             --boot-disk-size=10GB \
