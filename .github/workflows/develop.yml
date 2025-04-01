@@ -37,20 +37,20 @@ jobs:
             docker system prune -af
             docker compose up -d
             echo "Creating GCP compute image with unique identifier..."
-            gcloud compute images create ig-task-image1 \
+            gcloud compute images create ig-task-image-${TIMESTAMP} \
             --source-disk=ig-task \
             --source-disk-zone=us-central1-c \
             --family=ig-task-family \
             --force
-            gcloud compute instance-templates create ig-task-template1 \
+            gcloud compute instance-templates create ig-task-template-${TIMESTAMP} \
             --machine-type=e2-micro \
             --image-family=ig-task-family \
             --image-project=${{ secrets.GCP_PROJECT_ID }} \
             --tags=http-server,https-server,ig-task \
             --boot-disk-size=10GB \
             --boot-disk-type=pd-balanced
-            gcloud compute instance-groups managed rolling-action start-update instance-group-2 \
-            --version=template=ig-task-template \
+            gcloud compute instance-groups managed rolling-action start-update ig-task-group  \
+            --version=template=ig-task-template-${TIMESTAMP} \
             --zone=us-central1-c \
             --type=proactive
           EOF
