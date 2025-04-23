@@ -15,7 +15,7 @@ jobs:
       REPO_NAME: ig-task
       IMAGE_NAME: sample-test
       MIG_NAME: instance-group-github
-      HOST_PROJECT: maruti-project
+      HOST_PROJECT: maruti-project-454712
       NETWORK_NAME: maruthi-vpc
       SUBNET_NAME: subnet1
 
@@ -62,7 +62,7 @@ jobs:
             --no-address \
             --network=projects/${{ env.HOST_PROJECT }}/global/networks/${{ env.NETWORK_NAME }} \
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
-            --container-image=${{ env.IMAGE_URI }}\
+            --container-image=${{ env.IMAGE_URI }} \
             --container-restart-policy=always \
             --tags=instance-github 
 
