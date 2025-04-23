@@ -12,6 +12,7 @@ jobs:
     env:
       PROJECT_ID: maruti-project-454712 
       REGION: asia-south1
+      ZONE : asia-south1-c
       REPO_NAME: ig-task
       IMAGE_NAME: sample-test
       MIG_NAME: instance-group-github
@@ -71,7 +72,7 @@ jobs:
           echo "Starting rolling update on MIG: ${{ env.MIG_NAME }} using template: $TEMPLATE_NAME"
           gcloud compute instance-groups managed rolling-action start-update ${{ env.MIG_NAME }} \
             --project=${{ env.PROJECT_ID }} \
-            --region=${{ env.REGION }} \
+            --zone=${{ env.ZONE }} \
             --version template=$TEMPLATE_NAME \
             --max-surge=3 \
             --max-unavailable=0
