@@ -12,7 +12,7 @@ jobs:
     env:
       PROJECT_ID: maruti-project
       REGION: asia-south1
-      REPO_NAME: ig_task
+      REPO_NAME: ig-task
       IMAGE_NAME: sample-test
       MIG_NAME: instance-group-github
       HOST_PROJECT: maruti-project
