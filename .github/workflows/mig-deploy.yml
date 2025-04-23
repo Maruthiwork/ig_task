@@ -60,8 +60,8 @@ jobs:
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
             --container-image=$IMAGE_URI \
             --container-restart-policy=always \
+            --service-account=ig-task@maruti-project-454712.iam.gserviceaccount.com \
             --tags=http-server,https-server,instance-github \
-            --labels=app=republic-school
       - name: Rolling update on regional MIG
         run: |
           echo "Starting rolling update on MIG: ${{ env.MIG_NAME }} using template: $TEMPLATE_NAME"
