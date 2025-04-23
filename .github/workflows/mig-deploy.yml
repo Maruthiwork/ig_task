@@ -10,9 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_ID: maruti-project-454712 
+      PROJECT_ID: maruti-project-454712
       REGION: asia-south1
-      ZONE : asia-south1-c
       REPO_NAME: ig-task
       IMAGE_NAME: sample-test
       MIG_NAME: instance-group-github
@@ -24,16 +23,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Authenticate using service account key
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY_JSON }}'  # Use the service account key stored in GitHub Secrets
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
       - name: Set up Docker to use Artifact Registry
         run: |
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
-
       - name: Set up gcloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
@@ -50,7 +47,6 @@ jobs:
           docker push $IMAGE_URI
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
           echo "TEMPLATE_NAME=$TEMPLATE_NAME" >> $GITHUB_ENV
-
       - name: Create instance template from Docker image
         run: |
           echo "Creating instance template: $TEMPLATE_NAME"
@@ -62,10 +58,10 @@ jobs:
             --boot-disk-size=10GB \
             --network=projects/${{ env.HOST_PROJECT }}/global/networks/${{ env.NETWORK_NAME }} \
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
-            --container-image=${{ env.IMAGE_URI }} \
+            --container-image=$IMAGE_URI \
             --container-restart-policy=always \
-            --tags=instance-github 
-
+            --tags=http-server,https-server,instance-github \
+            --labels=app=republic-school
       - name: Rolling update on regional MIG
         run: |
           echo "Starting rolling update on MIG: ${{ env.MIG_NAME }} using template: $TEMPLATE_NAME"
