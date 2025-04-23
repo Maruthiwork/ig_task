@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_ID: maruti-project
+      PROJECT_ID: maruti-project-454712 
       REGION: asia-south1
       REPO_NAME: ig-task
       IMAGE_NAME: sample-test
