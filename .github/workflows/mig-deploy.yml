@@ -60,7 +60,6 @@ jobs:
             --machine-type=e2-micro \
             --boot-disk-type=pd-balanced \
             --boot-disk-size=10GB \
-            --no-address \
             --network=projects/${{ env.HOST_PROJECT }}/global/networks/${{ env.NETWORK_NAME }} \
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
             --container-image=${{ env.IMAGE_URI }} \
