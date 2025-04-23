@@ -60,12 +60,11 @@ jobs:
             --boot-disk-type=pd-balanced \
             --boot-disk-size=10GB \
             --no-address \
-            --network=projects/${{ env.HOST_PROJECT }}/global/networks/${{ env.NETWORK_NAME }} \
+            --network=projects/${{ env.HOST_PROJECT }}/Regional/networks/${{ env.NETWORK_NAME }} \
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
             --container-image=$IMAGE_URI \
             --container-restart-policy=always \
-            --tags=http-server,https-server \
-            --labels=app=
+            --tags=instance-github 
 
       - name: Rolling update on regional MIG
         run: |
