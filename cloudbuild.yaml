@@ -1,10 +1,10 @@
 options:
-  logs_bucket: gs://cloud-build-maruthi  # Replace with your bucket name
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET  # Let Cloud Build handle the log bucket
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/maruti-project-454712/my-app', '.']
-
+  
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/maruti-project-454712/my-app']
 
@@ -15,12 +15,17 @@ steps:
       - '--project'
       - 'maruti-project-454712'
       - '--zone'
-      - 'asia-south1-b'
+      - 'asia-south1-b'  # Your VM's zone
       - '--command'
       - |
+          # Pull the Docker image from GCR
           docker pull gcr.io/maruti-project-454712/my-app
+          
+          # Stop and remove any existing container
           docker stop my-app || true
           docker rm my-app || true
+          
+          # Run the new container
           docker run -d -p 80:80 --name my-app gcr.io/maruti-project-454712/my-app
 
 images:
