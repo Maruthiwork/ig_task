@@ -3,7 +3,7 @@ name: Build and Deploy CMS to MIG
 on:
   push:
     branches:
-      - maruthi-prelive
+      - maruthi-preliv
 
 jobs:
   build-and-deploy:
