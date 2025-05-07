@@ -29,5 +29,5 @@ images:
   - 'gcr.io/$PROJECT_ID/public-api'
 
 options:
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
 
