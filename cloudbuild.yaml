@@ -2,32 +2,26 @@ steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      [
-        'build',
-        '-t', 'gcr.io/$PROJECT_ID/public-api',
-        '.'
-      ]
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/public-api' #  Replace 'public-api' with your desired image name
+      - '.' #  The current directory (where your Dockerfile is)
 
   # Step 2: Push the image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
-      [
-        'push',
-        'gcr.io/$PROJECT_ID/public-api'
-      ]
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/public-api' #  Use the same image name from Step 1
 
-  # Step 3: Deploy the image to App Engine using app.yaml
+  # Step 3: Deploy the image to App Engine
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      [
-        'app', 'deploy',
-        '--image-url', 'gcr.io/$PROJECT_ID/public-api',
-        '--quiet'
-      ]
+      - 'app'
+      - 'deploy'
+      - 'app.yaml' #  Make sure your app.yaml is in the root
+      - '--image-url'
+      - 'gcr.io/$PROJECT_ID/public-api' #  Use the same image name
+      - '--quiet' #  Optional: Suppress non-critical output
 
 images:
-  - 'gcr.io/$PROJECT_ID/public-api'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-
+  - 'gcr.io/$PROJECT_ID/public-api' #  List of images to be pushed (optional, but good practice)
