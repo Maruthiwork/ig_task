@@ -3,21 +3,21 @@ name: Build and Deploy CMS to MIG
 on:
   push:
     branches:
-      - maruthi-preliv
+      - maruthi-prelive
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_ID: maruti-project-454712
+      PROJECT_ID: maruti-project-454712 
       REGION: asia-south1
-      REPO_NAME: ig-task
-      IMAGE_NAME: sample-test
-      MIG_NAME: instance-group-github
-      HOST_PROJECT: maruti-project-454712
-      NETWORK_NAME: maruthi-vpc
-      SUBNET_NAME: subnet1
+      REPO_NAME: ig_task
+      IMAGE_NAME: sample_image
+      MIG_NAME: instance-group 
+      HOST_PROJECT: maruthi-project
+      NETWORK_NAME: my-vpc
+      SUBNET_NAME: subnet-1
 
     steps:
       - name: Checkout code
@@ -31,6 +31,7 @@ jobs:
       - name: Set up Docker to use Artifact Registry
         run: |
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
       - name: Set up gcloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
@@ -40,16 +41,21 @@ jobs:
         run: |
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           IMAGE_URI="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:$TIMESTAMP"
-          TEMPLATE_NAME="ig-group-github-${TIMESTAMP}"
+          TEMPLATE_NAME="republic-school-${TIMESTAMP}"
+
           echo "Building Docker image..."
           docker build -t $IMAGE_URI .
+
           echo "Pushing Docker image to Artifact Registry..."
           docker push $IMAGE_URI
+
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
           echo "TEMPLATE_NAME=$TEMPLATE_NAME" >> $GITHUB_ENV
+
       - name: Create instance template from Docker image
         run: |
           echo "Creating instance template: $TEMPLATE_NAME"
+
           gcloud compute instance-templates create-with-container $TEMPLATE_NAME \
             --project=${{ env.PROJECT_ID }} \
             --region=${{ env.REGION }} \
@@ -60,11 +66,13 @@ jobs:
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
             --container-image=$IMAGE_URI \
             --container-restart-policy=always \
-            --service-account=ig-task@maruti-project-454712.iam.gserviceaccount.com \
-            --tags=http-server,https-server,instance-github \
+            --tags=http-server,https-server \
+            --labels=app=sample
+
       - name: Rolling update on regional MIG
         run: |
           echo "Starting rolling update on MIG: ${{ env.MIG_NAME }} using template: $TEMPLATE_NAME"
+
           gcloud compute instance-groups managed rolling-action start-update ${{ env.MIG_NAME }} \
             --project=${{ env.PROJECT_ID }} \
             --region=${{ env.REGION }} \
