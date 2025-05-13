@@ -14,7 +14,7 @@ jobs:
       REGION: asia-south1
       REPO_NAME: ig-task
       IMAGE_NAME: sample_image
-      MIG_NAME: instance-group 
+      MIG_NAME: instance-group-1
       HOST_PROJECT: maruti-project-454712
       NETWORK_NAME: my-vpc
       SUBNET_NAME: subnet-1
