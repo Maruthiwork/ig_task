@@ -15,7 +15,7 @@ jobs:
       REPO_NAME: ig-task
       IMAGE_NAME: sample_image
       MIG_NAME: instance-group 
-      HOST_PROJECT: maruti-project
+      HOST_PROJECT: maruti-project-454712
       NETWORK_NAME: my-vpc
       SUBNET_NAME: subnet-1
 
