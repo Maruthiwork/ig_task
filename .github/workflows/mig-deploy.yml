@@ -12,7 +12,7 @@ jobs:
     env:
       PROJECT_ID: maruti-project-454712 
       REGION: asia-south1
-      REPO_NAME: ig_task
+      REPO_NAME: ig-task
       IMAGE_NAME: sample_image
       MIG_NAME: instance-group 
       HOST_PROJECT: maruthi-project
