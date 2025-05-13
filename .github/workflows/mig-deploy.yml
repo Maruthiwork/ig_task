@@ -15,7 +15,7 @@ jobs:
       REPO_NAME: ig-task
       IMAGE_NAME: sample_image
       MIG_NAME: instance-group 
-      HOST_PROJECT: maruthi-project
+      HOST_PROJECT: maruti-project
       NETWORK_NAME: my-vpc
       SUBNET_NAME: subnet-1
 
@@ -41,7 +41,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           IMAGE_URI="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:$TIMESTAMP"
-          TEMPLATE_NAME="republic-school-${TIMESTAMP}"
+          TEMPLATE_NAME="sample-${TIMESTAMP}"
 
           echo "Building Docker image..."
           docker build -t $IMAGE_URI .
