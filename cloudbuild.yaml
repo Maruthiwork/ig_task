@@ -1,7 +1,7 @@
-# [START cloudbuild_yaml]
 # This file defines the steps for Cloud Build to build your Docker image
 # and deploy it to Google App Engine Flexible Environment.
-# Learn more: https://cloud.google.com/cloud-build/docs/deploying-applications/deploy-app-engine
+# Learn more: https://cloud.cloud.google.com/cloud-build/docs/deploying-applications/deploy-app-engine
+# Learn more about using service accounts: https://cloud.google.com/cloud-build/docs/securing-builds/use-service-accounts
 
 steps:
 # Step 1: Build the Docker image.
@@ -9,13 +9,13 @@ steps:
 # The image is tagged with the project ID and a service name.
 # Replace 'my-node-app' with a descriptive name for your service if needed.
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-node-app', '.']
+  args: ['build', '-t', 'gcr.io/maruti-project-454712/my-node-app', '.']
   # The '.' indicates that the Dockerfile is in the current directory.
 
-# Step 2: Push the Docker image to Google Container Registry (GCR).
-# This step pushes the built image to GCR so App Engine can access it.
+# Step 2: Push the Docker image to Google Container Registry (GCR) or Artifact Registry.
+# This step pushes the built image so App Engine can access it.
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/my-node-app']
+  args: ['push', 'gcr.io/maruti-project-454712/my-node-app']
 
 # Step 3: Deploy the application to Google App Engine Flexible Environment.
 # This step uses the 'gcloud' builder to deploy the application.
@@ -27,18 +27,18 @@ steps:
   # Use '--no-promote' if you want to manually split traffic later.
   # '--verbosity=info' provides detailed output during deployment.
 
-# Specifies the Docker image that will be pushed to GCR.
+# Specifies the Docker image that will be pushed to GCR/Artifact Registry.
 images:
   - 'gcr.io/$PROJECT_ID/my-node-app'
 
 # Options for the build.
-# logging: CLOUD_LOGGING_ONLY is the default and sends logs to Cloud Logging.
-# Omit this option or set it to CLOUD_LOGGING_ONLY if you want build logs.
-# If you truly want NO logs anywhere, set logging: NONE (not recommended for debugging).
 options:
-  # Explicitly setting logging to CLOUD_LOGGING_ONLY to satisfy the requirement
-  # when a service account is involved. This sends build logs to Cloud Logging.
+  # Explicitly setting logging to CLOUD_LOGGING_ONLY sends build logs to Cloud Logging.
   logging: CLOUD_LOGGING_ONLY
-  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET # Keeping this as it was in your previous config
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
 
-# [END cloudbuild_yaml]
+  # Specify the custom service account to use for this build.
+  # Replace [SERVICE_ACCOUNT_EMAIL] with the email address of the service account you created.
+  serviceAccount: 'projects/maruti-project-454712/serviceAccounts/[maruti-project-454712@appspot.gserviceaccount.com]'
+  # Note: You can use $PROJECT_ID instead of $PROJECT_NUMBER here as well.
+
