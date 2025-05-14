@@ -39,6 +39,6 @@ options:
 
   # Specify the custom service account to use for this build.
   # Replace [SERVICE_ACCOUNT_EMAIL] with the email address of the service account you created.
- # serviceAccount: 'projects/maruti-project-454712/serviceAccounts/[maruti-project-454712@appspot.gserviceaccount.com]'
+  serviceAccount: 'projects/maruti-project-454712/serviceAccounts/[maruti-project-454712@appspot.gserviceaccount.com]'
   # Note: You can use $PROJECT_ID instead of $PROJECT_NUMBER here as well.
 
