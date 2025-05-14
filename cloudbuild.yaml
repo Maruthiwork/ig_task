@@ -35,7 +35,10 @@ images:
 # logging: CLOUD_LOGGING_ONLY is the default and sends logs to Cloud Logging.
 # Omit this option or set it to CLOUD_LOGGING_ONLY if you want build logs.
 # If you truly want NO logs anywhere, set logging: NONE (not recommended for debugging).
-# options:
-#   logging: CLOUD_LOGGING_ONLY
+options:
+  # Explicitly setting logging to CLOUD_LOGGING_ONLY to satisfy the requirement
+  # when a service account is involved. This sends build logs to Cloud Logging.
+  logging: CLOUD_LOGGING_ONLY
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET # Keeping this as it was in your previous config
 
 # [END cloudbuild_yaml]
