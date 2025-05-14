@@ -1,20 +1,46 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+# [START app_yaml]
+# This file configures the Google App Engine Flexible environment for your
+# Node.js application using a custom runtime (Dockerfile).
+# Learn more: https://cloud.google.com/appengine/docs/flexible/nodejs/using-docker
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Specifies the runtime environment. 'custom' indicates that you are providing
+# a Dockerfile.
+runtime: custom
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Specifies the environment type as Flexible.
+env: flex
 
-# Install any needed dependencies
-RUN npm install --production
+# The entrypoint is typically not needed when using a Dockerfile with a CMD
+# instruction, as the CMD instruction in your Dockerfile serves as the entrypoint.
+# However, you can uncomment and use this if you need to override the Dockerfile's CMD.
+# entrypoint: npm start
 
-# Copy the application source code
-COPY . .
+# Configure network settings.
+network:
+  # The instance listens for requests on port 8080, as exposed in your Dockerfile.
+  instance_ip_mode: EXTERNAL
+  session_affinity: true
+  forwarded_ports:
+    - 8080 # Ensure this matches the EXPOSE port in your Dockerfile
 
-# Make the app available to the world outside this container
-EXPOSE 8080
+# Configure resources for your instance.
+# Adjust these based on your application's needs and expected traffic.
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
 
-# Define the command to run your application
-CMD [ "npm", "start" ]
+# Configure automatic scaling.
+# automatic_scaling:
+#   min_num_instances: 1
+#   max_num_instances: 10
+#   cool_down_period_sec: 120 # Default is 120 seconds.
+#   cpu_utilization:
+#     target_utilization: 0.5
+
+# You can set environment variables here that will be available to your application.
+# env_variables:
+#   NODE_ENV: 'production'
+#   MY_VARIABLE: 'some_value'
+
+# [END app_yaml]
