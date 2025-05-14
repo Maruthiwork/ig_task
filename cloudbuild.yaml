@@ -37,8 +37,8 @@ options:
   logging: CLOUD_LOGGING_ONLY
   default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
 
-  # Specify the custom service account to use for this build.
-  # Replace [SERVICE_ACCOUNT_EMAIL] with the email address of the service account you created.
-  serviceAccount: 'projects/maruti-project-454712/serviceAccounts/[maruti-project-454712@appspot.gserviceaccount.com]'
-  # Note: You can use $PROJECT_ID instead of $PROJECT_NUMBER here as well.
-
+# Specify the custom service account to use for this build.
+# This field should be at the top level, not under 'options'.
+# Replace [SERVICE_ACCOUNT_EMAIL] with the email address of the service account you created.
+serviceAccount: 'projects/maruti-project-454712/serviceAccounts/[maruti-project-454712@appspot.gserviceaccount.com]'
+# Note: You can use $PROJECT_ID instead of $PROJECT_NUMBER here as well.
