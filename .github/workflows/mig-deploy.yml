@@ -52,25 +52,21 @@ jobs:
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
           echo "TEMPLATE_NAME=$TEMPLATE_NAME" >> $GITHUB_ENV
 
-      - name: Create instance template with Ubuntu + Docker + your container
+      - name: Create instance template from Docker image
         run: |
-          echo "Creating instance template with Ubuntu base: $TEMPLATE_NAME"
-
-          gcloud compute instance-templates create $TEMPLATE_NAME \
+          echo "Creating instance template: $TEMPLATE_NAME"
+             
+          gcloud compute instance-templates create-with-container $TEMPLATE_NAME \
             --project=${{ env.PROJECT_ID }} \
+            --region=${{ env.REGION }} \
             --machine-type=e2-micro \
-            --boot-disk-size=10GB \
             --boot-disk-type=pd-balanced \
-            --image-family=ubuntu-2204-lts \
-            --image-project=ubuntu-os-cloud \
+            --boot-disk-size=10GB \
             --network=projects/${{ env.HOST_PROJECT }}/global/networks/${{ env.NETWORK_NAME }} \
             --subnet=projects/${{ env.HOST_PROJECT }}/regions/${{ env.REGION }}/subnetworks/${{ env.SUBNET_NAME }} \
+            --container-image=$IMAGE_URI \
+            --container-restart-policy=always \
             --tags=http-server,https-server \
-            --metadata=startup-script='#! /bin/bash
-              apt-get update
-              apt-get install -y docker.io
-              systemctl start docker
-              docker run -d --restart=always -p 80:80 -p 443:443 '"$IMAGE_URI"'' \
             --labels=app=sample
 
       - name: Rolling update on regional MIG
@@ -83,3 +79,4 @@ jobs:
             --version template=$TEMPLATE_NAME \
             --max-surge=3 \
             --max-unavailable=0
+
