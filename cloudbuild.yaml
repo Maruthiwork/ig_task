@@ -1,16 +1,15 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-node-app', '.']
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/my-node-app']
+    args: ['push', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui']
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['app', 'deploy', '.', '--promote', '--verbosity=info']
+    args: ['app', 'deploy', 'app.yaml', '--quiet']
 
 images:
-  - 'gcr.io/$PROJECT_ID/my-node-app'
+  - 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui'
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
