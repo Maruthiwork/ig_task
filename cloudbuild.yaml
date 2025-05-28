@@ -1,58 +1,33 @@
 steps:
-
   # Step 1: Build the Docker image
-
   - name: 'gcr.io/cloud-builders/docker'
-
     args:
-
       [
-
         'build',
-
-        '-t', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui',
-
+        '-t', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest',
         '.'
-
       ]
- 
+
   # Step 2: Push the Docker image to Artifact Registry
-
   - name: 'gcr.io/cloud-builders/docker'
-
     args: 
-
       [
-
         'push',
-
-        'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui'
-
+        'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest'
       ]
- 
+
   # Step 3: Deploy to App Engine using that image
-
   - name: 'gcr.io/cloud-builders/gcloud'
-
     args:
-
       [
-
         'app', 'deploy',
-
         'app.yaml',
-
-        '--image-url', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest',
-
-        '--quiet'
-
+        '--image-url', 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest'
+        # Removed '--quiet' to show deployment logs
       ]
- 
- 
+
 images:
-
   - 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest'
- 
 
- options:
+options:
   logging: CLOUD_LOGGING_ONLY
