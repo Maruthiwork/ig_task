@@ -53,7 +53,5 @@ images:
 
   - 'asia-south1-docker.pkg.dev/maruti-project-454712/test/web-ui:latest'
  
-options:
 
-  logging: CLOUD_LOGGING_ONLY
  
